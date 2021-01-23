@@ -79,7 +79,7 @@
           </li>
           
           <li class="active-pro">
-            <a href="./upgrade.html">
+            <a href="/api">
               <i class="now-ui-icons arrows-1_cloud-download-93"></i>
               <p>Kalender Event</p>
             </a>
@@ -124,7 +124,7 @@
             </a>
           </li>
           <li class="active-pro">
-            <a href="./upgrade.html">
+            <a href="/api">
               <i class="now-ui-icons arrows-1_cloud-download-93"></i>
               <p>Kalender Event</p>
             </a>
@@ -143,7 +143,7 @@
               <p>Registrasi</p>
             </a>
           </li>
-          <li class="active-pro">
+          <li class="/api">
             <a href="./upgrade.html">
               <i class="now-ui-icons arrows-1_cloud-download-93"></i>
               <p>Kalender Event</p>
