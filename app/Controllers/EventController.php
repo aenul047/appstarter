@@ -32,12 +32,11 @@ class EventController extends BaseController
 
     public function index()
     {
-        
-        if ($this->Session->get('role')=='user') {
-            $event=$this->Event->getEventUser($this->Session->get('id'));
-        }
-        else{
-            $event=$this->Event->getEvent();
+
+        if ($this->Session->get('role') == 'user') {
+            $event = $this->Event->getEventUser($this->Session->get('id'));
+        } else {
+            $event = $this->Event->getEvent();
         }
         $data = [
             'Event' => $event,
@@ -53,34 +52,41 @@ class EventController extends BaseController
             'validation' => \Config\Services::validation(),
             'User' => $this->User->findAll(),
             'session' => $this->Session->get('role')
-            
+
         ];
         return view('Event/add', $data);
     }
 
     public function save()
     {
-        if ($this->request->getVar("image_event")) {
-            $image = $this->request->getVar("image_event");
-        }else{
-            $image = 'default.jpg';
+        // ambil gambar
+        $fileGambar = $this->request->getFile('image_event');
+        // apakah tidak ada gambar yang diupload
+        if ($fileGambar->getError() == 4) {
+            $namaGambar = 'default.jpg';
+        } else {
+
+            // generate nama gambar random
+            $namaGambar = $fileGambar->getRandomName();
+            // pindahkan file ke gambar
+            $fileGambar->move('event', $namaGambar);
         }
+
         if ($this->request->getVar("id_komunitas")) {
             $id_komunitas = $this->request->getVar("id_komunitas");
-        }else{
+        } else {
             $id_komunitas = $this->Session->get('id');
-
         }
         if ($this->request->getVar("status")) {
             $status = $this->request->getVar("status");
-        }else{
+        } else {
             $status = 'Pending';
         }
-        
+
         $this->Event->save([
             "id_komunitas" => $id_komunitas,
             "nama_event" => $this->request->getVar("nama_event"),
-            "image_event" => $image,
+            "image_event" => $namaGambar,
             "registrasi_slot" => $this->request->getVar("registrasi_slot"),
             "hadiah" => $this->request->getVar("hadiah"),
             "estimasi_waktu" => $this->request->getVar("estimasi_waktu"),
@@ -92,7 +98,7 @@ class EventController extends BaseController
 
         ]);
         session()->setflashdata("pesan", "Event berhasil ditambahkan.");
-        return redirect()->to("/index.php/EventController");
+        return redirect()->to("/EventController");
     }
 
     public function update($id)
@@ -109,24 +115,29 @@ class EventController extends BaseController
 
     public function saveUpdate()
     {
-//         $image =  $this->Event->find($this->request->getVar("id_event"));
-// dd($image);
-        if ($this->request->getVar("image_event")) {
-            $image = $this->request->getVar("image_event");
-        }else{
-            $image =  $this->Event->find($this->request->getVar("id_event"));
-
-            $image = $image['image_event'];
+        $fileGambar = $this->request->getFile('image_event');
+        $gambarLama =  $this->Event->find($this->request->getVar("id_event"));
+        $gambarLama = $gambarLama['image_event'];
+        // cek gambar, apakah tetap gambar lama
+        if ($fileGambar->getError() == 4) {
+            $namaGambar = $gambarLama;
+        } else {
+            // generate nama file random
+            $namaGambar = $fileGambar->getRandomName();
+            // upload gambar
+            $fileGambar->move('event', $namaGambar);
+            // hapus file lama
+            unlink('event/' . $gambarLama);
         }
+
         if ($this->request->getVar("id_komunitas")) {
             $id_komunitas = $this->request->getVar("id_komunitas");
-        }else{
-            $id_komunitas = $this->Session->get('id');
-
+        } else {
+            $id_komunitas = 8;
         }
         if ($this->request->getVar("status")) {
             $status = $this->request->getVar("status");
-        }else{
+        } else {
             $status = $this->Event->find($this->request->getVar("id_event"));
 
             $status = $status['status'];
@@ -135,9 +146,9 @@ class EventController extends BaseController
         // dd($this->request->getVar());
         $this->Event->save([
             "id_event" => $this->request->getVar("id_event"),
-            "id_komunitas" =>$id_komunitas,
+            "id_komunitas" => $id_komunitas,
             "nama_event" => $this->request->getVar("nama_event"),
-            "image_event" => $image,
+            "image_event" => $namaGambar,
             "registrasi_slot" => $this->request->getVar("registrasi_slot"),
             "hadiah" => $this->request->getVar("hadiah"),
             "estimasi_waktu" => $this->request->getVar("estimasi_waktu"),
@@ -149,13 +160,16 @@ class EventController extends BaseController
 
         ]);
         session()->setflashdata("pesan", "Event berhasil ditambahkan.");
-        return redirect()->to("/index.php/EventController");
+        return redirect()->to("/EventController");
     }
 
     public function delete($id)
     {
+        $gambarLama =  $this->Event->find($id);
+        unlink('event/' . $gambarLama['image_event']);
+        
         $this->Event->delete($id);
-        return redirect()->to("/index.php/EventController");
+        return redirect()->to("/EventController");
     }
 
     public function detail($id)

@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-body">
                     <h2 class="my-3 ml-4">Form Update Data Event</h2>
-                    <form action="/index.php/EventController/saveUpdate" method="post" enctype="multipart/form-data">
+                    <form action="/EventController/saveUpdate" method="post" enctype="multipart/form-data">
                         <?= csrf_field(); ?>
                         <input type="hidden" name="id_event" value="<?= $Event[0]["id_event"]; ?>">
 
