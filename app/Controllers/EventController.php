@@ -23,7 +23,11 @@ class EventController extends BaseController
 
     public function Event()
     {
-        return view('Event/event');
+        $data = [
+            'session' => $this->Session->get('role')
+        ];
+
+        return view('Event/event', $data);
     }
 
     public function index()
