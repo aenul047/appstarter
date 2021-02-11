@@ -63,7 +63,7 @@ class EventController extends BaseController
         $fileGambar = $this->request->getFile('image_event');
         // apakah tidak ada gambar yang diupload
         if ($fileGambar->getError() == 4) {
-            $namaGambar = 'default.jpg';
+            $namaGambar = '';
         } else {
 
             // generate nama gambar random
@@ -127,13 +127,15 @@ class EventController extends BaseController
             // upload gambar
             $fileGambar->move('event', $namaGambar);
             // hapus file lama
-            unlink('event/' . $gambarLama);
+            if ($gambarLama) {
+                unlink('event/' . $gambarLama);
+            }
         }
 
         if ($this->request->getVar("id_komunitas")) {
             $id_komunitas = $this->request->getVar("id_komunitas");
         } else {
-            $id_komunitas = 8;
+            $id_komunitas = $this->Session->get('id');
         }
         if ($this->request->getVar("status")) {
             $status = $this->request->getVar("status");
@@ -166,7 +168,9 @@ class EventController extends BaseController
     public function delete($id)
     {
         $gambarLama =  $this->Event->find($id);
-        unlink('event/' . $gambarLama['image_event']);
+        if ($gambarLama) {
+            unlink('event/' . $gambarLama['image_event']);
+        }
         
         $this->Event->delete($id);
         return redirect()->to("/EventController");

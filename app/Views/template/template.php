@@ -79,7 +79,7 @@
           </li>
           
           <li class="active-pro">
-            <a href="/EventController/event">
+            <a href="/CalenderController/">
               <i class="now-ui-icons arrows-1_cloud-download-93"></i>
               <p>Kalender Event</p>
             </a>
@@ -124,7 +124,7 @@
             </a>
           </li>
           <li class="active-pro">
-            <a href="/EventController/event">
+            <a href="/CalenderController/">
               <i class="now-ui-icons arrows-1_cloud-download-93"></i>
               <p>Kalender Event</p>
             </a>
@@ -144,7 +144,7 @@
             </a>
           </li>
           <li class="">
-            <a href="/EventController/event">
+            <a href="/CalenderController/">
               <i class="now-ui-icons arrows-1_cloud-download-93"></i>
               <p>Kalender Event</p>
             </a>

@@ -35,7 +35,7 @@
                                         <?= $p["nama_event"]; ?>
                                     </td>
                                     <td class="text-center">
-                                        <?= $p["image_event"]; ?>
+                                        <img src="/event/<?= $p["image_event"]; ?>" alt="" width="100" height="100">
                                     </td>
                                     <td class="text-center">
                                         <?= $p["tanggal_mulai"]; ?>
